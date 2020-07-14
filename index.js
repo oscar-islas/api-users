@@ -2,11 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 const {check, validationResult} = require('express-validator');
 
 const app = express();
 const port = process.env.PORT || 8000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
