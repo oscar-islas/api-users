@@ -30,8 +30,8 @@ app.get('/users', (req, res) => {
 });
 
 app.post('/users', [
-    check('name'),
-    check('lastname'),
+    check('name').isLength({min: 1}),
+    check('lastname').isLength({min: 1}),
     check('email', 'El email ingresado es invalido').isEmail(),
     check('password', 'La contraseña debe de tener una longitud minima de 6 caracteres').isLength({min: 6}),
 ], (req, res) => {
