@@ -51,7 +51,7 @@ app.post('/users', [
                 if(users.some( userObj => userObj.email === user.email)){
                     res.status(400).json({message: "El usuario ya se encuentra registrado"});
                 }else{
-                    let nextId = users.length > 0 ? users[users.length].id + 1 : 1;
+                    let nextId = users.length > 0 ? users[users.length-1].id + 1 : 1;
                     req.body.id = nextId;
                     users.push(req.body);
                     fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users), (error) => {
