@@ -69,7 +69,7 @@ app.post('/users', [
 
 
 app.delete('/user/:id', (req, res) => {
-    let id = req.params.id;
+    let id = Number(req.params.id);    
     let users =  [];
     fs.readFile(path.join(__dirname, 'users.json'), (error, data) => {
         if(error){
@@ -79,13 +79,15 @@ app.delete('/user/:id', (req, res) => {
         }else{
             users = JSON.parse(data.toString());
             let position = users.findIndex(user => user.id === id);
+            let user = users.find(user => user.id === id);
+            console.log("posicion",position);
             if(position>=0){
                 users.splice(position, 1);
                 fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users), (error) => {
                     if(error){
                         res.status(400).json({error: 'Hubo un error al eliminar al usuario en el sistema'});
                     }else{
-                        res.status(200).json({message: 'El usuario ha sido eliminado correctamente', data: req.body});
+                        res.status(200).json({message: 'El usuario ha sido eliminado correctamente', data: user });
                     }
                 });
             }else{
