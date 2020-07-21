@@ -51,7 +51,7 @@ app.post('/users', [
                 if(users.some( userObj => userObj.email === user.email)){
                     res.status(400).json({message: "El usuario ya se encuentra registrado"});
                 }else{
-                    let nextId = users.length > 0 ? users[users.length-1].id + 1 : 1;
+                    let nextId = users.length > 0 ? Number(users[users.length-1].id) + 1 : 1;
                     req.body.id = nextId;
                     users.push(req.body);
                     fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users), (error) => {
@@ -78,9 +78,8 @@ app.delete('/user/:id', (req, res) => {
             });
         }else{
             users = JSON.parse(data.toString());
-            let position = users.findIndex(user => user.id === id);
-            let user = users.find(user => user.id === id);
-            console.log("posicion",position);
+            let position = users.findIndex(user => Number(user.id) === id);
+            let user = users.find(user => Number(user.id) === id);
             if(position>=0){
                 users.splice(position, 1);
                 fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users), (error) => {
@@ -116,9 +115,10 @@ app.put('/user/:id', [
             });
         }else{
             users = JSON.parse(data.toString());
-            let position = users.findIndex(user => user.id === id);
-            let user = users.find(user => user.id === id);
-            user = {['id']: user.id, ...req.body};   
+            let position = users.findIndex(user => Number(user.id) === id);
+            let user = users.find(user => Number(user.id) === id);
+            let {name, lastname, password, email} = req.body;
+            user = {['id']: Number(user.id), name, lastname, password, email};   
             users[position] = user;         
             if(position>=0){
                 fs.writeFile(path.join(__dirname, 'users.json'), JSON.stringify(users), (error) => {
